@@ -35,8 +35,13 @@ func convert(unit: String){
         var newUnit = Double(unit[range])
         newUnit = newUnit! * 100
         print("\(newUnit!)cm")
+    }else{
+        print("정확한 값을 입력해주세요")
     }
     
 }
 convert(unit: "183cm")
 convert(unit: "3.14m")
+
+let inputValue = readLine()
+convert(unit: inputValue ?? "0")
