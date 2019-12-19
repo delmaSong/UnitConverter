@@ -11,31 +11,39 @@ import Foundation
 
 //입력값 공백 유무 확인
 func startConvert(){
-   let inputValue = readLine()
-    if inputValue!.contains(" "){
-        setStart(inputValue: inputValue!)
-    }else{
-        checkStartUnit(startUnit: inputValue!)
+    var quitFlag = false
+    
+    while !quitFlag{
+       let inputValue = readLine()
+        if inputValue!.contains(" "){
+            setStart(inputValue: inputValue!)
+        }else if inputValue!.contains("q"){
+            quitFlag = true
+        }else{
+            checkStartUnit(startUnit: inputValue!)
+        }
     }
-           
 }
 
 //공백 존재시 시작유닛, 타겟 유닛 설정
 func setStart(inputValue: String){
-    let targets = inputValue.split(separator: " ")
-    let startUnit = String(targets[0])
-    let targetUnit = String(targets[1])
-        
-    if startUnit.contains("cm"), targetUnit.contains("inch"){
-        centiToInch(startUnit: startUnit)
-    }else if startUnit.contains("m"), targetUnit.contains("inch"){
-        centiToInch(startUnit: meterToCenti(startUnit: startUnit))
-    }else if startUnit.contains("inch"), targetUnit.contains("m"){
-        centiToMeter(startUnit: inchToCenti(startUnit: startUnit))
-    }else{
-        checkStartUnit(startUnit: startUnit)
-    }
-    
+        let targets = inputValue.split(separator: " ")
+        let startUnit = String(targets[0])
+        let targetUnit = String(targets[1])
+            
+        if startUnit.contains("cm"), targetUnit.contains("inch"){
+            centiToInch(startUnit: startUnit)
+        }else if startUnit.contains("m"), targetUnit.contains("inch"){
+            centiToInch(startUnit: meterToCenti(startUnit: startUnit))
+        }else if startUnit.contains("inch"), targetUnit.contains("m"){
+            centiToMeter(startUnit: inchToCenti(startUnit: startUnit))
+        }else if startUnit.contains("yard"), targetUnit.contains("m"){
+            centiToMeter(startUnit: yardToCenti(startUnit: startUnit))
+        }else if startUnit.contains("m"), targetUnit.contains("yard"){
+            centiToYard(startUnit: meterToCenti(startUnit: startUnit))
+        }else{
+            checkStartUnit(startUnit: startUnit)
+        }
 }
 
 //시작유닛 확인
@@ -46,9 +54,10 @@ func checkStartUnit(startUnit: String){
        meterToCenti(startUnit: startUnit)
     }else if startUnit.contains("inch"){
         inchToCenti(startUnit: startUnit)
+    }else if startUnit.contains("yard"){
+        yardToMeter(startUnit: startUnit)
     }else{
         print("지원하지 않는 단위입니다. 다시 입력해주세요")
-        startConvert()
     }
 }
 
@@ -85,5 +94,32 @@ func centiToInch(startUnit: String){
    newUnit = newUnit! / 2.54
    print("\(newUnit!)inch")
 }
+
+func yardToCenti(startUnit: String) -> String{
+    let end = startUnit.index(startUnit.endIndex, offsetBy: -4)
+    let range = startUnit.startIndex..<end
+    var newUnit = Double(startUnit[range])
+    newUnit = newUnit! * 91.44
+    print("\(newUnit!)cm")
+    return "\(newUnit!)cm"
+}
+
+func centiToYard(startUnit: String){
+    let end = startUnit.index(startUnit.endIndex, offsetBy: -2)
+    let range = startUnit.startIndex..<end
+    var newUnit = Double(startUnit[range])
+    newUnit = newUnit! / 91.44
+    print("\(newUnit!)yard")
+}
+
+func yardToMeter(startUnit: String){
+    let end = startUnit.index(startUnit.endIndex, offsetBy: -4)
+    let range = startUnit.startIndex..<end
+    var newUnit = Double(startUnit[range])
+    newUnit = newUnit! * 0.9144
+    print("\(newUnit!)m")
+}
+
+
 
 startConvert()
